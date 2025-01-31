@@ -16,19 +16,32 @@ stages:
 - stage: CheckAzureML
   displayName: 'Check Azure ML Resources'
   jobs:
-  - job: Deploy
-    displayName: 'Check the Resources'
+  - job: CheckResources
+    displayName: 'List Azure ML Resources'
     steps:
-    - checkout: self  # Pulls code from GitHub
+    - checkout: self  # Pulls code from repository
 
     - task: AzureCLI@2
-      displayName: 'Run the template'
+      displayName: 'List Azure ML Resources'
       inputs:
         azureSubscription: $(azureServiceConnection)
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
-          az deployment group create \
-            --resource-group $(resourceGroupName) \
-            --template-file check-ml.bicep \
-            --parameters location=$(location) workspaceName=$(workspaceName)
+          echo "Fetching Azure ML resources in resource group: $(resourceGroupName)"
+          
+          # List Azure ML Workspaces
+          echo "Available ML Workspaces:"
+          az ml workspace list --resource-group $(resourceGroupName) --output table
+          
+          # List Compute Instances
+          echo "Available Compute Instances:"
+          az ml compute list --resource-group $(resourceGroupName) --workspace-name $(workspaceName) --output table
+          
+          # List Datasets
+          echo "Available Datasets:"
+          az ml dataset list --resource-group $(resourceGroupName) --workspace-name $(workspaceName) --output table
+          
+          # List Models
+          echo "Available Models:"
+          az ml model list --resource-group $(resourceGroupName) --workspace-name $(workspaceName) --output table
