@@ -4,7 +4,7 @@ trigger:
       - main  # Runs on every commit to main
 
 pool:
-  vmImage: 'Azure Pipelines'
+  name: 'Azure Pipelines'  # Ensure this is your self-hosted agent pool
 
 variables:
   azureServiceConnection: 'ml-rg-connect'  # Name of your Azure service connection
