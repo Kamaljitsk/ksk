@@ -17,12 +17,12 @@ stages:
   displayName: 'Check Azure ML Resources'
   jobs:
   - job: Deploy
-    displayName: 'Deploy Bicep Template'
+    displayName: 'Check the Resources'
     steps:
     - checkout: self  # Pulls code from GitHub
 
     - task: AzureCLI@2
-      displayName: 'Run Bicep Deployment'
+      displayName: 'Run the template'
       inputs:
         azureSubscription: $(azureServiceConnection)
         scriptType: bash
